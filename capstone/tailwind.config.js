@@ -20,7 +20,7 @@ export default {
     },
     extend: {
       colors: {
-        baseBlue: "#091F56",
+        darkblue: "#091F56",
         orange: "#DE7B1F",
         lightblue: "#97DAFF",
       },

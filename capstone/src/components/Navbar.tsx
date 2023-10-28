@@ -1,10 +1,8 @@
 import { Link } from "react-router-dom";
-import { IoMenuSharp } from "react-icons/io5";
 
 const Navbar = () => {
   return (
-    <div className="navbar bg-baseBlue text-white">
-      <IoMenuSharp />
+    <div className="navbar bg-darkblue text-white">
       <div className="flex-1">
         <a className="text-orange normal-case text-xl ml-10 pointer-events-none">
           APP NAME
@@ -12,21 +10,20 @@ const Navbar = () => {
       </div>
       <div className="flex-none">
         <ul className="menu menu-horizontal px-1">
-          {/* {userToken.username && ( */}
-          <li>
-            <a className="text-lightblue pointer-events-none">Welcome, user!</a>
-          </li>
-          {/* )} */}
-          {/* {userToken.loggedInStatus && ( */}
           <li>
             <Link className="text-white hover:text-orange" to="/">
               Dashboard
             </Link>
           </li>
+          <li>
+            <Link className="text-white hover:text-orange" to="/clients">
+              Clients
+            </Link>
+          </li>
           {/* )} */}
           {/* {userToken.loggedInStatus && ( */}
           <li>
-            <Link className="text-white hover:text-orange" to="/">
+            <Link className="text-white hover:text-orange" to="/calculator">
               Calculator
             </Link>
           </li>
