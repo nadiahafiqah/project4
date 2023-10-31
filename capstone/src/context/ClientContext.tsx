@@ -18,6 +18,7 @@ export const useClient = () => {
 
 export function ClientProvider({ children }: ClientProviderProps) {
   const [clients, setClients] = useState([]);
+  const [seletedClient, setSelectedClient] = useState(defaultClient);
 
   const addClient = (client) => {
     setClients([...clients, client]);
@@ -30,8 +31,25 @@ export function ClientProvider({ children }: ClientProviderProps) {
     setClients([newClientsList]);
   };
 
+  const updateClient = (newClient) => {
+    const newClientsList = clients.map((client) => {
+      return client.id === newClient.id ? newClient : client;
+    });
+    setClients([...clients, newClientsList]);
+  };
+
   return (
-    <ClientContext.Provider value={{ addClient, deleteClient }}>
+    <ClientContext.Provider
+      value={{
+        addClient,
+        deleteClient,
+        updateClient,
+        seletedClient,
+        setSelectedClient,
+        clients,
+        setClients,
+      }}
+    >
       {children}
     </ClientContext.Provider>
   );

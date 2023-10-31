@@ -1,8 +1,26 @@
 import { useClient } from "../context/ClientContext";
 import Client from "./Client";
+import { useEffect } from "react";
+import axios from "axios";
 
 const ClientsTable = () => {
-  const { clients } = useClient();
+  const { clients, setClients } = useClient();
+
+  useEffect((client) => {
+    axios({
+      method: "GET",
+      url: `http://localhost:15432/clients`,
+      // withCredentials: true,
+    })
+      .then((response) => {
+        setClients(response.data);
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+        notifyError();
+      });
+  }, []);
 
   const handleClick = () => {};
 
@@ -10,7 +28,6 @@ const ClientsTable = () => {
     <>
       <div className="overflow-x-auto w-[80%] m-auto">
         <table className="table text-black">
-          {/* head */}
           <thead className="text-black">
             <tr>
               <th></th>
@@ -25,31 +42,6 @@ const ClientsTable = () => {
               clients.map((client) => {
                 return <Client key={client.id} {...client} />;
               })}
-
-            {/* row 1 */}
-            <tr className="hover:bg-darkblue hover:text-orange">
-              <th>1</th>
-              <td>Cy Ganderton</td>
-              <td>Quality Control Specialist</td>
-              <td>Blue</td>
-              <td>Blue</td>
-            </tr>
-            {/* row 2 */}
-            <tr className="hover">
-              <th>2</th>
-              <td>Hart Hagerty</td>
-              <td>Desktop Support Technician</td>
-              <td>Purple</td>
-              <td>Blue</td>
-            </tr>
-            {/* row 3 */}
-            <tr className="hover">
-              <th>3</th>
-              <td>Brice Swyre</td>
-              <td>Tax Accountant</td>
-              <td>Red</td>
-              <td>Blue</td>
-            </tr>
           </tbody>
         </table>
       </div>

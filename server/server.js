@@ -1,27 +1,25 @@
-var createError = require("http-errors");
-var express = require("express");
-var path = require("path");
-var cookieParser = require("cookie-parser");
-var logger = require("morgan");
-const { Sequelize } = require("sequelize");
+const express = require("express");
+const cookieParser = require("cookie-parser");
+const { sequelize } = require("./models");
+const cors = require("cors");
 
-var indexRouter = require("./routes/index");
-var usersRouter = require("./routes/users");
+const usersRouter = require("./routes/users");
+const clientsRouter = require("./routes/clients");
+const policyRouter = require("./routes/policy");
 
-var app = express();
-
-// view engine setup
-app.set("views", path.join(__dirname, "views"));
-app.set("view engine", "jade");
-
-app.use(logger("dev"));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+const app = express();
+app.use(
+  cors({
+    origin: ["http://localhost:5173", /\.vercel\.app$/, /\.onrender\.com$/],
+    credentials: true,
+  })
+);
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.json());
 
-app.use("/", indexRouter);
 app.use("/users", usersRouter);
+app.use("/clients", clientsRouter);
+app.use("/policy", policyRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -44,5 +42,3 @@ app.listen({ port: 15432 }, async () => {
   await sequelize.authenticate();
   console.log("Database connected!");
 });
-
-module.exports = app;

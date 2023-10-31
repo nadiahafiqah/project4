@@ -12,7 +12,7 @@ module.exports = {
 async function getAll(req, res) {
   try {
     const clientList = await Client.findAll();
-    return res.json(items);
+    return res.json(clientList);
   } catch (err) {
     console.log(err);
     return res.json(err);
@@ -21,12 +21,12 @@ async function getAll(req, res) {
 
 // Get one client from db
 async function getOneClient(req, res) {
-  const uuid = req.params.itemUuid; //req.params.listUuid;
+  const id = req.params.clientId;
   try {
-    const item = await Client.findOne({
-      where: { uuid },
+    const client = await Client.findOne({
+      where: { id },
     });
-    return res.json(item);
+    return res.json(client);
   } catch (err) {
     console.log(err);
     return res.json(err);
@@ -36,9 +36,10 @@ async function getOneClient(req, res) {
 // Create a client
 async function create(req, res) {
   const { firstName, lastName, dob, sex, contact } = req.body;
-  const uuid = req.params.clientUuid;
+  // const uuid = req.params.clientUuid;
+  console.log("Client route create");
   try {
-    const clientList = await Client.findOne({ where: { uuid } });
+    // const clientList = await Client.findOne({ where: { uuid } });
     const client = await Client.create({
       firstName,
       lastName,
@@ -46,19 +47,19 @@ async function create(req, res) {
       sex,
       contact,
     });
-    return res.json(item);
+    return res.json(client);
   } catch (err) {
     console.log(err);
     return res.json(err);
   }
 }
 
-// Delete an item
+// Delete a client
 async function deleteClient(req, res) {
-  const uuid = req.params.clientUuid;
+  const id = req.params.clientId;
   try {
     const client = await Client.findOne({
-      where: { uuid },
+      where: { id },
     });
     const id = client.id;
     await item.destroy();
@@ -69,20 +70,21 @@ async function deleteClient(req, res) {
   }
 }
 
+// Edit a client
 async function updateClient(req, res) {
-  const uuid = req.params.clientUuid;
+  const id = req.params.clientId;
   const { firstName, lastName, dob, sex, contact } = req.body;
   try {
     const client = await Client.findOne({
-      where: { uuid },
+      where: { id },
     });
     client.firstName = firstName;
     client.lastName = lastName;
     client.dob = dob;
-    client.sex = price;
+    client.sex = sex;
     client.contact = contact;
     await client.save();
-    return res.json(item);
+    return res.json(client);
   } catch (err) {
     console.log(err);
     return res.json(err);
