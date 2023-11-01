@@ -5,6 +5,7 @@ import { DateTime } from "luxon";
 import { useClient } from "../context/ClientContext";
 import DeleteClientModal from "./form/DeleteClientModal";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const Client = (client) => {
   const { setSelectedClient, setEditFormType } = useClient();
@@ -45,19 +46,19 @@ const Client = (client) => {
         </label>
         <label
           htmlFor="delete"
-          className="drawer-button btn btn-primary py-1 px-2 bg-transparent border-transparent text-orange rounded"
+          className="drawer-button btn btn-primary py-1 px-2 mx-1 bg-transparent border-transparent text-orange rounded"
           onClick={handleToggle}
         >
           <FontAwesomeIcon icon={faTrashAlt} />
         </label>
         <DeleteClientModal handleToggle={handleToggle} open={open} />
 
-        {/* <label
-          htmlFor="delete"
-          className="drawer-button btn btn-primary py-1 px-2 bg-transparent border-transparent text-orange rounded"
+        <Link
+          to={`/clients/${client.id}`}
+          className="btn btn-primary btn-sm py-1 px-2 bg-transparent border-transparent text-orange rounded"
         >
           Details
-        </label> */}
+        </Link>
       </td>
     </tr>
   );
