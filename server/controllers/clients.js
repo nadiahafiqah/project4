@@ -11,7 +11,7 @@ module.exports = {
 // Get all clients
 async function getAll(req, res) {
   try {
-    const clientList = await Client.findAll();
+    const clientList = await Client.findAll({ order: [["id", "ASC"]] });
     return res.json(clientList);
   } catch (err) {
     console.log(err);
@@ -61,9 +61,10 @@ async function deleteClient(req, res) {
     const client = await Client.findOne({
       where: { id },
     });
-    const id = client.id;
-    await item.destroy();
-    return res.json({ message: `Item - ${itemName} removed!` });
+    await client.destroy();
+    return res.json({
+      message: `Client - ${client.firstName} ${client.lastName} removed!`,
+    });
   } catch (err) {
     console.log(err);
     return res.json(err);
