@@ -2,9 +2,13 @@ import { ReactNode, createContext, useContext, useState } from "react";
 
 const ClientContext = createContext({} as ClientContext);
 
+type ClientProviderProps = {
+  children: ReactNode;
+};
+
+type ClientContext = {};
+
 const defaultClient = {
-  uuid: "",
-  id: "",
   firstName: "",
   lastName: "",
   dob: "",
@@ -18,7 +22,8 @@ export const useClient = () => {
 
 export function ClientProvider({ children }: ClientProviderProps) {
   const [clients, setClients] = useState([]);
-  const [seletedClient, setSelectedClient] = useState(defaultClient);
+  const [selectedClient, setSelectedClient] = useState(defaultClient);
+  const [editFormType, setEditFormType] = useState("");
 
   const addClient = (client) => {
     setClients([...clients, client]);
@@ -44,10 +49,12 @@ export function ClientProvider({ children }: ClientProviderProps) {
         addClient,
         deleteClient,
         updateClient,
-        seletedClient,
+        selectedClient,
         setSelectedClient,
         clients,
         setClients,
+        editFormType,
+        setEditFormType,
       }}
     >
       {children}

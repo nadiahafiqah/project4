@@ -26,7 +26,7 @@ const ClientsTable = () => {
 
   return (
     <>
-      <div className="overflow-x-auto w-[80%] m-auto">
+      <div className="overflow-x-auto w-[80%] m-auto pb-[5%]">
         <table className="table text-black">
           <thead className="text-black">
             <tr>

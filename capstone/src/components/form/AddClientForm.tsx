@@ -1,18 +1,58 @@
 import axios from "axios";
 import { useRef, useState } from "react";
 import { useClient } from "../../context/ClientContext";
+import { TextInput, NumberInput, DateInput, SelectSex } from "./FormComponents";
 
-const AddClientForm = () => {
-  const { addClient, notifySuccess, notifyError } = useClient();
+const AddClientForm = ({ closeDrawer }: { closeDrawer: () => void }) => {
+  const { addClient } = useClient();
   const formRef = useRef({} as HTMLFormElement);
 
   const [client, setClient] = useState({
+    id: 0,
     firstName: "",
     lastName: "",
     dob: "",
     sex: "",
     contact: 0,
   });
+
+  const fieldItems = [
+    {
+      type: "text-input",
+      label: "First Name",
+      name: "firstName",
+      value: client.firstName,
+      required: true,
+    },
+    {
+      type: "text-input",
+      label: "Last Name",
+      name: "lastName",
+      value: client.lastName,
+      required: true,
+    },
+    {
+      type: "date",
+      label: "DOB",
+      name: "dob",
+      value: client.dob,
+      required: true,
+    },
+    {
+      type: "select",
+      label: "Sex",
+      name: "sex",
+      value: client.sex,
+      required: true,
+    },
+    {
+      type: "number",
+      label: "Contact",
+      name: "contact",
+      value: client.contact,
+      required: true,
+    },
+  ];
 
   const handleInput = (
     event:
@@ -28,7 +68,6 @@ const AddClientForm = () => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     //console.log("item sent => ", JSON.stringify(item, null, 2));
-    let res: Client;
     try {
       axios({
         method: "POST",
@@ -43,72 +82,75 @@ const AddClientForm = () => {
         },
       }).then((response) => {
         console.log(response);
-        setTimeout(() => addClient(res), 900);
+        addClient(response.data);
         formRef.current.reset();
-        notifySuccess("Client successfully added!");
+        // notifySuccess("Client successfully added!");
       });
     } catch (err) {
       console.log(err);
-      notifyError();
+      // notifyError();
     }
   };
 
   return (
-    <div className="form-control w-full max-w-xs ">
-      <form onSubmit={handleSubmit}>
-        <label className="label">
-          <span className="label-text ">First Name</span>
-        </label>
-        <input
-          type="text"
-          className="input input-bordered border-slate-400 w-full max-w-xs"
-          onChange={handleInput}
-          required
-        />
-        <label className="label">
-          <span className="label-text ">Last Name</span>
-        </label>
-        <input
-          type="text"
-          className="input input-bordered border-slate-400 w-full max-w-xs"
-          onChange={handleInput}
-          required
-        />
-        <label className="label">
-          <span className="label-text ">Date of Birth</span>
-        </label>
-        <input
-          type="date"
-          className="input input-bordered border-slate-400 w-full max-w-xs"
-          onChange={handleInput}
-          required
-        />
-        <label className="label">
-          <span className="label-text">Sex</span>
-        </label>
-        <select className="select select-bordered border-slate-400" required>
-          <option disabled>Select one</option>
-          <option>Female</option>
-          <option>Male</option>
-        </select>
-        <label className="label">
-          <span className="label-text ">Contact Number</span>
-        </label>
-        <input
-          type="text"
-          className="input input-bordered border-slate-400 w-full max-w-xs"
-          onChange={handleInput}
-          required
-        />
-        <div className="wrapper flex flex-row-reverse">
-          <input
-            type="submit"
-            className="btn btn-primary btn-sm mt-4 hover:bg-orange hover:text-white"
-            value="Add Client"
-          />
+    <>
+      <form onSubmit={handleSubmit} ref={formRef}>
+        <div className="flex-col">
+          <h3 className="text-orange py-4">Add new client</h3>
+          {fieldItems.map((client, index) => {
+            if (client.type === "text-input") {
+              return (
+                <TextInput
+                  key={index}
+                  label={client.label}
+                  name={client.name}
+                  handleInput={handleInput}
+                  required={client.required}
+                />
+              );
+            } else if (client.type === "date") {
+              return (
+                <DateInput
+                  key={index}
+                  label={client.label}
+                  name={client.name}
+                  handleInput={handleInput}
+                  required={client.required}
+                />
+              );
+            } else if (client.type === "number") {
+              return (
+                <NumberInput
+                  key={index}
+                  label={client.label}
+                  name={client.name}
+                  handleInput={handleInput}
+                  required={client.required}
+                />
+              );
+            } else if (client.type === "select") {
+              return (
+                <SelectSex
+                  key={index}
+                  label={client.label}
+                  name={client.name}
+                  handleInput={handleInput}
+                  required={client.required}
+                />
+              );
+            }
+          })}
+          <div className="wrapper flex flex-row-reverse">
+            <input
+              type="submit"
+              className="btn btn-primary btn-sm mt-4 hover:bg-orange hover:text-white"
+              value="Add Client"
+              onClick={() => closeDrawer}
+            />
+          </div>
         </div>
       </form>
-    </div>
+    </>
   );
 };
 

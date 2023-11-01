@@ -2,11 +2,28 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserEdit } from "@fortawesome/free-solid-svg-icons";
 import { faTrashAlt } from "@fortawesome/free-solid-svg-icons/faTrashAlt";
 import { DateTime } from "luxon";
+import { useClient } from "../context/ClientContext";
+import DeleteClientModal from "./form/DeleteClientModal";
+import { useState } from "react";
 
 const Client = (client) => {
+  const { setSelectedClient, setEditFormType } = useClient();
+
   const convertDate = (date: string) => {
     const dt = DateTime.fromISO(date);
     return dt.toLocaleString(DateTime.DATE_MED);
+  };
+
+  const editClientForm = () => {
+    setSelectedClient(client);
+    setEditFormType("edit");
+  };
+
+  const [open, setOpen] = useState(false);
+
+  const handleToggle = () => {
+    setSelectedClient(client);
+    setOpen((prev) => !prev);
   };
 
   return (
@@ -20,26 +37,27 @@ const Client = (client) => {
       <td>{client.contact}</td>
       <td>
         <label
-          htmlFor="edit-drawer"
-          // onClick={handleEditClick}
+          htmlFor="my-drawer-4"
           className="drawer-button btn btn-primary py-1 px-2 bg-transparent border-transparent text-orange rounded"
+          onClick={editClientForm}
         >
           <FontAwesomeIcon icon={faUserEdit} />
         </label>
         <label
           htmlFor="delete"
-          // onClick={handleEditClick}
           className="drawer-button btn btn-primary py-1 px-2 bg-transparent border-transparent text-orange rounded"
+          onClick={handleToggle}
         >
           <FontAwesomeIcon icon={faTrashAlt} />
-        </label>{" "}
-        <label
+        </label>
+        <DeleteClientModal handleToggle={handleToggle} open={open} />
+
+        {/* <label
           htmlFor="delete"
-          // onClick={handleEditClick}
           className="drawer-button btn btn-primary py-1 px-2 bg-transparent border-transparent text-orange rounded"
         >
           Details
-        </label>
+        </label> */}
       </td>
     </tr>
   );

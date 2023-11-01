@@ -1,114 +1,169 @@
-import { useRef, useState } from "react";
+import { useRef, useEffect } from "react";
 import { useClient } from "../../context/ClientContext";
 import axios from "axios";
+import { TextInput, DateInput, SelectSex, NumberInput } from "./FormComponents";
 
-const EditClientForm = () => {
-  const { addClient, notifySuccess, notifyError } = useClient();
+const EditClientForm = ({ closeDrawer }: { closeDrawer: () => void }) => {
+  const { updateClient, selectedClient, setSelectedClient } = useClient();
   const formRef = useRef({} as HTMLFormElement);
 
-  const [client, setClient] = useState({
-    firstName: "",
-    lastName: "",
-    dob: "",
-    sex: "",
-    contact: 0,
-  });
+  const fieldItems = [
+    {
+      type: "text-input",
+      label: "First Name",
+      name: "firstName",
+      value: selectedClient.firstName,
+      required: true,
+    },
+    {
+      type: "text-input",
+      label: "Last Name",
+      name: "lastName",
+      value: selectedClient.lastName,
+      required: true,
+    },
+    {
+      type: "date",
+      label: "DOB",
+      name: "dob",
+      value: selectedClient.dob && selectedClient.dob.slice(0, 10),
+      required: true,
+    },
+    {
+      type: "select",
+      label: "Sex",
+      name: "sex",
+      value: selectedClient.sex,
+      required: true,
+    },
+    {
+      type: "number",
+      label: "Contact",
+      name: "contact",
+      value: selectedClient.contact,
+      required: true,
+    },
+  ];
 
   const handleInput = (
     event:
       | React.ChangeEvent<HTMLInputElement>
       | React.ChangeEvent<HTMLTextAreaElement>
   ) => {
-    setClient((prev) => ({
+    setSelectedClient((prev) => ({
       ...prev,
       [event.target.name]: event.target.value,
     }));
   };
 
+  useEffect(() => {
+    selectedClient.id;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedClient.id]);
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    //console.log("item sent => ", JSON.stringify(item, null, 2));
-    let res: Client;
     try {
       axios({
         method: "PUT",
-        url: `localhost:5173/clients/${client.id}`,
+        url: `http://localhost:15432/clients/${selectedClient.id}`,
         // withCredentials: true,
         data: {
-          firstName: client.firstName,
-          lastName: client.lastName,
-          dob: client.dob,
-          sex: client.sex,
-          contact: client.contact,
+          firstName: selectedClient.firstName,
+          lastName: selectedClient.lastName,
+          dob: selectedClient.dob,
+          sex: selectedClient.sex,
+          contact: selectedClient.contact,
         },
       }).then((response) => {
         console.log(response);
-        setTimeout(() => addClient(res), 900);
+        updateClient(response.data);
         formRef.current.reset();
-        notifySuccess("Client successfully added!");
       });
     } catch (err) {
       console.log(err);
-      notifyError();
     }
+    closeDrawer && closeDrawer();
   };
 
   return (
-    <div className="form-control w-full max-w-xs ">
-      <form onSubmit={handleSubmit}>
-        <label className="label">
-          <span className="label-text ">First Name</span>
+    <>
+      <form onSubmit={handleSubmit} ref={formRef}>
+        <div className="flex-col">
+          <h3 className="text-orange py-4">Edit client</h3>
+          {fieldItems.map((client, index) => {
+            if (client.type === "text-input") {
+              return (
+                <TextInput
+                  key={index}
+                  label={client.label}
+                  name={client.name}
+                  value={client.value}
+                  handleInput={handleInput}
+                  required={client.required}
+                />
+              );
+            } else if (client.type === "date") {
+              return (
+                <DateInput
+                  key={index}
+                  label={client.label}
+                  name={client.name}
+                  value={client.value}
+                  handleInput={handleInput}
+                  required={client.required}
+                />
+              );
+            } else if (client.type === "number") {
+              return (
+                <NumberInput
+                  key={index}
+                  label={client.label}
+                  name={client.name}
+                  value={client.value}
+                  handleInput={handleInput}
+                  required={client.required}
+                />
+              );
+            } else if (client.type === "select") {
+              return (
+                <SelectSex
+                  key={index}
+                  label={client.label}
+                  name={client.name}
+                  value={client.value}
+                  handleInput={handleInput}
+                  required={client.required}
+                />
+              );
+            }
+          })}
+        </div>
+
+        <label
+          htmlFor="my-drawer-4"
+          className="btn btn-primary btn-sm float-right mt-[10px] mr-[6px]drawer-button hover:bg-orange hover:text-white"
+          onClick={() => closeDrawer}
+        >
+          Cancel
         </label>
-        <input
-          type="text"
-          className="input input-bordered border-slate-400 w-full max-w-xs"
-          onChange={handleInput}
-          required
-        />
-        <label className="label">
-          <span className="label-text ">Last Name</span>
-        </label>
-        <input
-          type="text"
-          className="input input-bordered border-slate-400 w-full max-w-xs"
-          onChange={handleInput}
-          required
-        />
-        <label className="label">
-          <span className="label-text ">Date of Birth</span>
-        </label>
-        <input
-          type="date"
-          className="input input-bordered border-slate-400 w-full max-w-xs"
-          onChange={handleInput}
-          required
-        />
-        <label className="label">
-          <span className="label-text">Sex</span>
-        </label>
-        <select className="select select-bordered border-slate-400" required>
-          <option disabled>Select one</option>
-          <option>Female</option>
-          <option>Male</option>
-        </select>
-        <label className="label">
-          <span className="label-text ">Contact Number</span>
-        </label>
-        <input
-          type="text"
-          className="input input-bordered border-slate-400 w-full max-w-xs"
-          onChange={handleInput}
-          required
-        />
-        <div className="wrapper flex flex-row-reverse">
+
+        <button
+          className="btn btn-primary btn-sm float-right mt-[10px] mr-[6px] hover:bg-orange hover:text-white"
+          type="submit"
+        >
+          Save
+        </button>
+
+        {/* <div className="wrapper flex flex-row-reverse">
           <input
             type="submit"
             className="btn btn-primary btn-sm mt-4 hover:bg-orange hover:text-white"
-            value="Add Client"
+            value="Save"
           />
-        </div>
+        </div> */}
       </form>
-    </div>
+    </>
   );
 };
 
