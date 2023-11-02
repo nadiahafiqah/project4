@@ -1,4 +1,4 @@
-const { Policy } = require("../models");
+const { Policy, Client } = require("../models");
 
 module.exports = {
   getAll,
@@ -21,10 +21,10 @@ async function getAll(req, res) {
 
 // Get one policy from db
 async function getOnePolicy(req, res) {
-  const uuid = req.params.policyUuid;
+  const id = req.params.policyId;
   try {
     const policy = await Policy.findOne({
-      where: { uuid },
+      where: { id },
     });
     return res.json(policy);
   } catch (err) {
@@ -47,9 +47,9 @@ async function create(req, res) {
     coverage,
     paymentPeriod,
   } = req.body;
-  const uuid = req.params.policyUuid;
+  const id = req.params.clientId;
   try {
-    const policyList = await Policy.findOne({ where: { uuid } });
+    const client = await Client.findOne({ where: { id } });
     const policy = await Policy.create({
       category,
       policyName,
@@ -61,6 +61,7 @@ async function create(req, res) {
       lifeAssured,
       coverage,
       paymentPeriod,
+      clientId: client.id,
     });
     return res.json(policy);
   } catch (err) {
@@ -71,14 +72,13 @@ async function create(req, res) {
 
 // Delete a policy
 async function deletePolicy(req, res) {
-  const uuid = req.params.clientUuid;
+  const id = req.params.policyId;
   try {
     const policy = await Policy.findOne({
-      where: { uuid },
+      where: { id },
     });
-    const id = policy.id;
     await policy.destroy();
-    return res.json({ message: `Policy - ${policyName} removed!` });
+    return res.json({ message: `Policy - ${policy.policyName} removed!` });
   } catch (err) {
     console.log(err);
     return res.json(err);
@@ -87,7 +87,7 @@ async function deletePolicy(req, res) {
 
 // Edit a policy
 async function updatePolicy(req, res) {
-  const uuid = req.params.clientUuid;
+  const id = req.params.policyId;
   const {
     category,
     policyName,
@@ -102,7 +102,7 @@ async function updatePolicy(req, res) {
   } = req.body;
   try {
     const policy = await Policy.findOne({
-      where: { uuid },
+      where: { id },
     });
     (policy.category = category),
       (policy.policyName = policyName),
@@ -114,7 +114,7 @@ async function updatePolicy(req, res) {
       (policy.lifeAssured = lifeAssured),
       (policy.coverage = coverage),
       (policy.paymentPeriod = paymentPeriod),
-      await client.save();
+      await policy.save();
     return res.json(policy);
   } catch (err) {
     console.log(err);

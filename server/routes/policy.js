@@ -6,7 +6,7 @@ router.get("/", policyCtrl.getAll);
 //Get one client in db
 router.get("/:policyId", policyCtrl.getOne);
 // Create a client
-router.post("/", policyCtrl.create);
+router.post("/:clientId", policyCtrl.create);
 // Delete a client
 router.delete("/:policyId", policyCtrl.delete);
 // Update a client's detail
