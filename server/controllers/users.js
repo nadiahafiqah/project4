@@ -1,5 +1,5 @@
 const { User } = require("../models");
-// const { createSecretToken } = require("../util/SecretToken");
+const { createSecretToken } = require("../util/SecretToken");
 
 module.exports = {
   signup,
@@ -22,9 +22,9 @@ async function signup(req, res) {
     }
     const user = await User.create({
       username,
-      firstName,
-      lastName,
-      email,
+      // firstName,
+      // lastName,
+      // email,
       password,
     });
     return res.json(user);
@@ -37,10 +37,12 @@ async function login(req, res) {
   const { username, password } = req.body;
   try {
     const user = await User.findOne({ where: { username } });
+    //console.log("user, ", user);
     if (!user) {
       return res.json({ message: "Incorrect username/password!" });
     }
     const validPassword = await user.validPassword(password);
+    console.log("validPassword", validPassword);
     if (!validPassword) {
       return res.json({ message: "Incorrect username/password!" });
     }
@@ -51,13 +53,13 @@ async function login(req, res) {
         httpOnly: false,
         path: "/",
         secure: true,
-        sameSite: "None",
+        sameSite: "lax",
       })
       .cookie("username", username, {
         httpOnly: false,
         path: "/",
         secure: true,
-        sameSite: "None",
+        sameSite: "lax",
       });
     res.json({
       // message: "User logged in successfully!",
@@ -84,13 +86,13 @@ async function logout(req, res) {
       httpOnly: false,
       path: "/",
       secure: true,
-      sameSite: "None",
+      sameSite: "lax",
     })
     .clearCookie("username", {
       httpOnly: false,
       path: "/",
       secure: true,
-      sameSite: "None",
+      sameSite: "lax",
     });
   return res.json({ message: "User logged out successfully!" });
 }

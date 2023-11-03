@@ -10,7 +10,9 @@ module.exports = {
 
 // Get all policies
 async function getAll(req, res) {
+  const id = req.params.clientId;
   try {
+    const client = await Client.findOne({ where: { id } });
     const policyList = await Policy.findAll();
     return res.json(policyList);
   } catch (err) {

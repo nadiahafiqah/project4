@@ -1,4 +1,4 @@
-const { Client } = require("../models");
+const { Client, User } = require("../models");
 
 module.exports = {
   getAll,
@@ -36,16 +36,17 @@ async function getOneClient(req, res) {
 // Create a client
 async function create(req, res) {
   const { firstName, lastName, dob, sex, contact } = req.body;
-  // const uuid = req.params.clientUuid;
+  // const id = req.params.userId;
   console.log("Client route create");
   try {
-    // const clientList = await Client.findOne({ where: { uuid } });
+    // const user = await User.findOne({ where: { id } });
     const client = await Client.create({
       firstName,
       lastName,
       dob,
       sex,
       contact,
+      // userId: user.id,
     });
     return res.json(client);
   } catch (err) {
