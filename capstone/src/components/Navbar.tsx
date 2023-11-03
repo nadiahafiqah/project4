@@ -14,14 +14,14 @@ const Navbar = () => {
         method: "GET",
         url: `http://localhost:15432/users/logout`,
         withCredentials: true,
-      }).then((response) => {
+      }).then(() => {
         setUserToken({
           username: undefined,
           loggedInStatus: false,
         });
         setTimeout(() => {
           navigate("/login");
-        }, 1000);
+        }, 500);
       });
     } catch (error) {
       console.log(error);
