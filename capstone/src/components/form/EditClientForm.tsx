@@ -154,14 +154,6 @@ const EditClientForm = ({ closeDrawer }: { closeDrawer: () => void }) => {
         >
           Save
         </button>
-
-        {/* <div className="wrapper flex flex-row-reverse">
-          <input
-            type="submit"
-            className="btn btn-primary btn-sm mt-4 hover:bg-orange hover:text-white"
-            value="Save"
-          />
-        </div> */}
       </form>
     </>
   );

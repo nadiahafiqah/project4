@@ -16,6 +16,12 @@ const defaultClient = {
   contact: 0,
 };
 
+const defaultPolicy = {
+  category: "",
+  policyName: "",
+  policyNo: "",
+};
+
 export const useClient = () => {
   return useContext(ClientContext);
 };
@@ -23,7 +29,7 @@ export const useClient = () => {
 export function ClientProvider({ children }: ClientProviderProps) {
   const [clients, setClients] = useState([]);
   const [selectedClient, setSelectedClient] = useState(defaultClient);
-  const [editFormType, setEditFormType] = useState("");
+  const [clientFormType, setClientFormType] = useState("");
 
   const addClient = (client) => {
     setClients([...clients, client]);
@@ -43,6 +49,36 @@ export function ClientProvider({ children }: ClientProviderProps) {
     setClients([...clients, newClientsList]);
   };
 
+  // Policy stuff
+  const [policies, setPolicies] = useState([]);
+  const [selectedPolicy, setSelectedPolicy] = useState(defaultPolicy);
+  const [policyFormType, setPolicyFormType] = useState("");
+
+  const addPolicy = (newPolicy) => {
+    setPolicies([...policies, newPolicy]);
+    console.log(policies);
+  };
+
+  const deletePolicy = (deletedPolicy) => {
+    const newPolicyList = policies.filter((policy) => {
+      return policy.id !== deletedPolicy.id;
+    });
+    setPolicies([newPolicyList]);
+  };
+
+  const updatePolicy = (updatedPolicy) => {
+    const newPolicyList = policies.map((policy) => {
+      return policy.id === updatedPolicy.id ? updatedPolicy : policy;
+    });
+    setPolicies([...policies, newPolicyList]);
+  };
+
+  // Login stuff
+  const [userToken, setUserToken] = useState<Token>({
+    username: undefined,
+    loggedInStatus: false,
+  });
+
   return (
     <ClientContext.Provider
       value={{
@@ -53,8 +89,19 @@ export function ClientProvider({ children }: ClientProviderProps) {
         setSelectedClient,
         clients,
         setClients,
-        editFormType,
-        setEditFormType,
+        clientFormType,
+        setClientFormType,
+        policies,
+        setPolicies,
+        addPolicy,
+        deletePolicy,
+        updatePolicy,
+        selectedPolicy,
+        setSelectedPolicy,
+        policyFormType,
+        setPolicyFormType,
+        userToken,
+        setUserToken,
       }}
     >
       {children}

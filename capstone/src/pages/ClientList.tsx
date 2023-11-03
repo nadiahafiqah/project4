@@ -7,7 +7,7 @@ import { useRef } from "react";
 
 const ClientList = () => {
   const drawerRef = useRef({} as HTMLInputElement);
-  const { editFormType, setEditFormType } = useClient();
+  const { clientFormType, setClientFormType } = useClient();
 
   const closeDrawer = () => {
     if (drawerRef.current) {
@@ -16,7 +16,7 @@ const ClientList = () => {
   };
 
   const handleAddClick = () => {
-    setEditFormType("add");
+    setClientFormType("add");
   };
 
   return (
@@ -48,7 +48,7 @@ const ClientList = () => {
           aria-label="close sidebar"
         ></label>
         <ul className="menu p-4 w-80 min-h-full bg-base-200 text-base-content">
-          {editFormType === "edit" ? (
+          {clientFormType === "edit" ? (
             <EditClientForm closeDrawer={closeDrawer} />
           ) : (
             <AddClientForm closeDrawer={closeDrawer} />

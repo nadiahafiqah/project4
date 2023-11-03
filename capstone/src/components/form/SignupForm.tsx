@@ -1,51 +1,114 @@
-const SignupForm = () => {
-  return (
-    <div className="relative flex flex-col items-center justify-center h-screen overflow-hidden">
-      <div className="w-full p-6 bg-white border-t-4 border-gray-600 rounded-md shadow-md border-top lg:max-w-lg">
-        <h1 className="text-3xl font-semibold text-center text-gray-700">
-          Sign Up
-        </h1>
-        <form className="space-y-4">
-          <div>
-            <label className="label">
-              <span className="text-base label-text">First Name</span>
-            </label>
-            <input type="text" className="w-full input input-bordered" />
-          </div>
-          <div>
-            <label className="label">
-              <span className="text-base label-text">Last Name</span>
-            </label>
-            <input type="text" className="w-full input input-bordered" />
-          </div>
-          <div>
-            <label className="label">
-              <span className="text-base label-text">Email</span>
-            </label>
-            <input type="text" className="w-full input input-bordered" />
-          </div>
+import { useState } from "react";
+import axios from "axios";
+import { Link } from "react-router-dom";
+import { PasswordInput, UsernameInput } from "./FormComponents";
 
-          <div>
-            <label className="label">
-              <span className="text-base label-text">Username</span>
-            </label>
-            <input type="text" className="w-full input input-bordered" />
-          </div>
-          <div>
-            <label className="label">
-              <span className="text-base label-text">Password</span>
-            </label>
-            <input type="password" className="w-full input input-bordered" />
-          </div>
-          <a
-            href="#"
-            className="text-xs text-gray-600 hover:underline hover:text-blue-600"
-          ></a>
-          <div>
-            <button className="btn btn-block">Submit</button>
-          </div>
-        </form>
+const SignupForm = () => {
+  const [user, setUser] = useState<User>({
+    username: "",
+    password: "",
+  });
+  const [message, setMessage] = useState<string | undefined>("");
+  const navigate = useNavigate();
+
+  const fieldItems = [
+    { type: "text-input", label: "Username", name: "username", required: true },
+    {
+      type: "password-input",
+      label: "Password",
+      name: "password",
+      required: true,
+    },
+  ];
+
+  const handleInput = (
+    event:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.ChangeEvent<HTMLTextAreaElement>
+  ) => {
+    setMessage("");
+    setUser((prev: User) => ({
+      ...prev,
+      [event.target.name]: event.target.value,
+    }));
+  };
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    try {
+      axios({
+        method: "POST",
+        url: `http://localhost:15432/users/signup`,
+        data: {
+          username: user.username,
+          password: user.password,
+        },
+      }).then((response) => {
+        // console.log(response.data);
+        if (!response.data.message) {
+          setMessage("Sign up successful!");
+          setTimeout(() => {
+            navigate("/login");
+          }, 800);
+        } else {
+          setMessage("Username exists. Please try another username!");
+        }
+      });
+    } catch (err) {
+      console.log("An error occurred: ", err);
+    }
+  };
+
+  return (
+    <div className=" bg-slate-50 p-8 rounded-3xl max-w-lg flex flex-row flex-wrap m-20">
+      <div className="text-xl font-semibold basis-1/2">
+        Register for account
       </div>
+      <Link className="basis-1/2 text-right" to="/login">
+        Login
+      </Link>
+      <form onSubmit={handleSubmit} className="basis-full mt-4">
+        {fieldItems.map((item, index) => {
+          if (item.type === "text-input") {
+            return (
+              <UsernameInput
+                key={index}
+                label={item.label}
+                name={item.name}
+                handleInput={handleInput}
+                required={item.required}
+              />
+            );
+          } else if (item.type === "password-input") {
+            return (
+              <PasswordInput
+                key={index}
+                label={item.label}
+                name={item.name}
+                handleInput={handleInput}
+                required={item.required}
+              />
+            );
+          }
+        })}
+        {message &&
+          (message === "Sign up successful!" ? (
+            <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative text-center mt-3">
+              {message}
+            </div>
+          ) : (
+            <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative text-center mt-3">
+              {message}
+            </div>
+          ))}
+        <button
+          type="submit"
+          className="btn btn-primary mr-0 ml-auto mt-4 block"
+        >
+          Register
+        </button>
+      </form>
     </div>
   );
 };

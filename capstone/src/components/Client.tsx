@@ -8,7 +8,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 
 const Client = (client) => {
-  const { setSelectedClient, setEditFormType } = useClient();
+  const { setSelectedClient, setClientFormType } = useClient();
 
   const convertDate = (date: string) => {
     const dt = DateTime.fromISO(date);
@@ -17,7 +17,7 @@ const Client = (client) => {
 
   const editClientForm = () => {
     setSelectedClient(client);
-    setEditFormType("edit");
+    setClientFormType("edit");
   };
 
   const [open, setOpen] = useState(false);
@@ -25,6 +25,10 @@ const Client = (client) => {
   const handleToggle = () => {
     setSelectedClient(client);
     setOpen((prev) => !prev);
+  };
+
+  const handleDetails = () => {
+    setSelectedClient(client);
   };
 
   return (
@@ -39,14 +43,14 @@ const Client = (client) => {
       <td>
         <label
           htmlFor="my-drawer-4"
-          className="drawer-button btn btn-primary py-1 px-2 bg-transparent border-transparent text-orange rounded"
+          className="drawer-button btn btn-primary btn-sm py-1 px-2 bg-transparent border-transparent text-orange rounded"
           onClick={editClientForm}
         >
           <FontAwesomeIcon icon={faUserEdit} />
         </label>
         <label
           htmlFor="delete"
-          className="drawer-button btn btn-primary py-1 px-2 mx-1 bg-transparent border-transparent text-orange rounded"
+          className="drawer-button btn btn-primary btn-sm py-1 px-2 mx-1 bg-transparent border-transparent text-orange rounded"
           onClick={handleToggle}
         >
           <FontAwesomeIcon icon={faTrashAlt} />
@@ -56,6 +60,7 @@ const Client = (client) => {
         <Link
           to={`/clients/${client.id}`}
           className="btn btn-primary btn-sm py-1 px-2 bg-transparent border-transparent text-orange rounded"
+          onClick={handleDetails}
         >
           Details
         </Link>

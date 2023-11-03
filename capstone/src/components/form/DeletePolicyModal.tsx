@@ -2,20 +2,20 @@ import axios from "axios";
 import { useClient } from "../../context/ClientContext";
 import { DeleteModalProps } from "../../types";
 
-const DeleteClientModal = ({ handleToggle, open }: DeleteModalProps) => {
-  const { selectedClient, deleteClient } = useClient();
+const DeletePolicyModal = ({ handleToggle, open }: DeleteModalProps) => {
+  const { selectedPolicy, deletePolicy } = useClient();
 
   const handleClick = async () => {
     //console.log("item deleted => ", JSON.stringify(selectedItem, null, 2));
     try {
       await axios({
         method: "DELETE",
-        url: `http://localhost:15432/clients/${selectedClient.id}`,
+        url: `http://localhost:15432/policy/${selectedPolicy.id}`,
         withCredentials: true,
       }).then(() => {
         //response
         //console.log(response.data);
-        deleteClient(selectedClient.id);
+        deletePolicy(selectedPolicy.id);
       });
     } catch (err) {
       console.log(err);
@@ -31,9 +31,9 @@ const DeleteClientModal = ({ handleToggle, open }: DeleteModalProps) => {
       onClose={handleToggle}
     >
       <div className="modal-box bg-lightblue text-black">
-        <h3 className="font-bold text-lg">Delete client</h3>
+        <h3 className="font-bold text-lg">Delete policy</h3>
         <p className="py-4">
-          Are you sure you want to delete this client? This action cannot be
+          Are you sure you want to delete this policy? This action cannot be
           undone.
         </p>
         <div className="btn-wrapper float-right">
@@ -58,4 +58,4 @@ const DeleteClientModal = ({ handleToggle, open }: DeleteModalProps) => {
   );
 };
 
-export default DeleteClientModal;
+export default DeletePolicyModal;

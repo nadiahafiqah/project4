@@ -6,7 +6,7 @@ import axios from "axios";
 const ClientsTable = () => {
   const { clients, setClients } = useClient();
 
-  useEffect((client) => {
+  useEffect(() => {
     axios({
       method: "GET",
       url: `http://localhost:15432/clients`,
@@ -18,11 +18,8 @@ const ClientsTable = () => {
       })
       .catch((error) => {
         console.log(error);
-        notifyError();
       });
   }, []);
-
-  const handleClick = () => {};
 
   return (
     <>

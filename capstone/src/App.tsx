@@ -7,6 +7,7 @@ import Login from "./pages/Login";
 import PolicyPage from "./pages/PolicyPage";
 import ClientList from "./pages/ClientList";
 import ClientDetails from "./components/ClientDetails";
+import ClientProfile from "./pages/ClientProfile";
 
 function App() {
   return (
@@ -17,7 +18,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/" element={<Login />} />
             <Route path="/clients" element={<ClientList />} />
-            <Route path="/clients/:clientId" element={<ClientDetails />} />
+            <Route path="/clients/:clientId" element={<ClientProfile />} />
             <Route path="/clients/:policyId" element={<PolicyPage />} />
           </Route>
         </Routes>
