@@ -33,7 +33,7 @@ const Client = (client) => {
 
   return (
     <tr className="hover:bg-darkblue hover:text-orange">
-      <td>{client.id}</td>
+      {/* <td>{client.id}</td> */}
       <td>
         {client.firstName} {client.lastName}
       </td>

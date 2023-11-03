@@ -32,7 +32,7 @@ const AddClientForm = ({ closeDrawer }: { closeDrawer: () => void }) => {
       required: true,
     },
     {
-      type: "date",
+      type: "date-input",
       label: "DOB",
       name: "dob",
       value: client.dob,
@@ -67,12 +67,11 @@ const AddClientForm = ({ closeDrawer }: { closeDrawer: () => void }) => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    //console.log("item sent => ", JSON.stringify(item, null, 2));
     try {
       axios({
         method: "POST",
         url: `http://localhost:15432/clients`,
-        // withCredentials: true,
+        withCredentials: true,
         data: {
           firstName: client.firstName,
           lastName: client.lastName,
@@ -81,14 +80,13 @@ const AddClientForm = ({ closeDrawer }: { closeDrawer: () => void }) => {
           contact: client.contact,
         },
       }).then((response) => {
+        console.log(client.dob);
         console.log(response);
         addClient(response.data);
         formRef.current.reset();
-        // notifySuccess("Client successfully added!");
       });
     } catch (err) {
       console.log(err);
-      // notifyError();
     }
   };
 
@@ -108,7 +106,7 @@ const AddClientForm = ({ closeDrawer }: { closeDrawer: () => void }) => {
                   required={client.required}
                 />
               );
-            } else if (client.type === "date") {
+            } else if (client.type === "date-input") {
               return (
                 <DateInput
                   key={index}

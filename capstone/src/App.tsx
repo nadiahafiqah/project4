@@ -4,10 +4,11 @@ import Layout from "./pages/Layout";
 import { ClientProvider } from "./context/ClientContext";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
-import PolicyPage from "./pages/PolicyPage";
+// import PolicyPage from "./pages/PolicyPage";
 import ClientList from "./pages/ClientList";
-import ClientDetails from "./components/ClientDetails";
 import ClientProfile from "./pages/ClientProfile";
+import SignUp from "./pages/SignUp";
+import NotFound from "./pages/NotFound";
 
 function App() {
   return (
@@ -16,10 +17,12 @@ function App() {
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route path="/" element={<Home />} />
-            <Route path="/" element={<Login />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<SignUp />} />
             <Route path="/clients" element={<ClientList />} />
             <Route path="/clients/:clientId" element={<ClientProfile />} />
-            <Route path="/clients/:policyId" element={<PolicyPage />} />
+            {/* <Route path="/clients/:policyId" element={<PolicyPage />} /> */}
+            <Route path="/*" element={<NotFound />} />
           </Route>
         </Routes>
       </ClientProvider>

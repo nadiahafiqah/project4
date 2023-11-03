@@ -110,7 +110,7 @@ const AddPolicyForm = () => {
       axios({
         method: "POST",
         url: `http://localhost:15432/policy/${selectedClient.id}`,
-        // withCredentials: true,
+        withCredentials: true,
         data: {
           category: policy.category,
           policyName: policy.policyName,

@@ -2,6 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { UsernameInput, PasswordInput } from "./FormComponents";
+import { useNavigate } from "react-router-dom";
 
 const LoginForm = () => {
   const [user, setUser] = useState<User>({
@@ -9,7 +10,6 @@ const LoginForm = () => {
     password: "",
   });
   const [message, setMessage] = useState<string | undefined>("");
-
   const navigate = useNavigate();
 
   const fieldItems = [
@@ -49,7 +49,11 @@ const LoginForm = () => {
       }).then((response) => {
         // console.log(response.data);
         if (response.data.success) {
-          // setUserToken({username: response.data.cookies.username, token: response.data.cookies.token});
+          // setUserToken({
+          //   username: response.data.cookies.username,
+          //   token: response.data.cookies.token,
+          // });
+          console.log(user.username);
           setTimeout(() => {
             navigate("/");
           }, 500);
@@ -63,11 +67,15 @@ const LoginForm = () => {
   };
 
   return (
-    <div className=" bg-slate-50 p-8 rounded-3xl max-w-lg flex flex-row flex-wrap m-20">
-      <div className="text-xl font-semibold basis-1/2">Account Login</div>
-      <Link className="basis-1/2 text-right" to="/signup">
-        Sign Up
-      </Link>
+    <div className=" bg-darkblue p-8 rounded-3xl max-w-lg flex flex-row flex-wrap m-20">
+      <div className="text-xl font-semibold m-auto">Account Login</div>
+      <div className="basis-full text-sm justify-center p-1">
+        No account?{" "}
+        <Link className="text-orange hover:text-white" to="/signup">
+          Sign up
+        </Link>
+      </div>
+
       <form className="basis-full mt-4" onSubmit={handleSubmit}>
         {fieldItems.map((item, index) => {
           if (item.type === "text-input") {
@@ -99,51 +107,12 @@ const LoginForm = () => {
         )}
         <button
           type="submit"
-          className="btn btn-primary mr-0 ml-auto mt-4 block"
+          className="btn btn-primary btn-sm m-auto mt-4 block hover:bg-orange hover:text-white"
         >
           Login
         </button>
       </form>
     </div>
-
-    // <div className="relative flex flex-col items-center justify-center h-screen overflow-hidden">
-    //   <div className="w-full p-6 bg-white border-t-4 border-gray-600 rounded-md shadow-md border-top lg:max-w-lg">
-    //     <h1 className="text-3xl font-semibold text-center text-gray-700">
-    //       FA App Name
-    //     </h1>
-    //     <form className="space-y-4">
-    //       <div>
-    //         <label className="label">
-    //           <span className="text-base label-text">Username</span>
-    //         </label>
-    //         <input
-    //           type="text"
-    //           placeholder="Username"
-    //           className="w-full input input-bordered"
-    //         />
-    //       </div>
-    //       <div>
-    //         <label className="label">
-    //           <span className="text-base label-text">Password</span>
-    //         </label>
-    //         <input
-    //           type="password"
-    //           placeholder="Enter Password"
-    //           className="w-full input input-bordered"
-    //         />
-    //       </div>
-    //       <a
-    //         href="#"
-    //         className="text-xs text-gray-600 hover:underline hover:text-blue-600"
-    //       >
-    //         Forget Password?
-    //       </a>
-    //       <div>
-    //         <button className="btn btn-block">Login</button>
-    //       </div>
-    //     </form>
-    //   </div>
-    // </div>
   );
 };
 

@@ -2,6 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { PasswordInput, UsernameInput } from "./FormComponents";
+import { useNavigate } from "react-router-dom";
 
 const SignupForm = () => {
   const [user, setUser] = useState<User>({
@@ -61,13 +62,17 @@ const SignupForm = () => {
   };
 
   return (
-    <div className=" bg-slate-50 p-8 rounded-3xl max-w-lg flex flex-row flex-wrap m-20">
-      <div className="text-xl font-semibold basis-1/2">
-        Register for account
+    <div className=" bg-darkblue p-8 rounded-3xl max-w-lg flex flex-row flex-wrap m-20">
+      <div className="text-xl font-semibold m-auto">Register</div>
+      <div className="basis-full text-sm justify-center p-1">
+        Have an account?{" "}
+        <Link
+          className="basis-1/2 text-right text-orange hover:text-white"
+          to="/login"
+        >
+          Log in
+        </Link>
       </div>
-      <Link className="basis-1/2 text-right" to="/login">
-        Login
-      </Link>
       <form onSubmit={handleSubmit} className="basis-full mt-4">
         {fieldItems.map((item, index) => {
           if (item.type === "text-input") {
@@ -104,7 +109,7 @@ const SignupForm = () => {
           ))}
         <button
           type="submit"
-          className="btn btn-primary mr-0 ml-auto mt-4 block"
+          className="btn btn-primary btn-sm m-auto mt-4 block hover:bg-orange hover:text-white"
         >
           Register
         </button>

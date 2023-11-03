@@ -4,12 +4,13 @@ import { useEffect } from "react";
 import axios from "axios";
 
 const ClientsTable = () => {
-  const { clients, setClients } = useClient();
+  const { clients, setClients, userToken } = useClient();
 
   useEffect(() => {
+    // if (userToken.username && userToken.loggedInStatus) {
     axios({
       method: "GET",
-      url: `http://localhost:15432/clients`,
+      url: `http://localhost:15432/clients/`,
       // withCredentials: true,
     })
       .then((response) => {
@@ -27,7 +28,6 @@ const ClientsTable = () => {
         <table className="table text-black">
           <thead className="text-black">
             <tr>
-              <th></th>
               <th>Name</th>
               <th>Sex</th>
               <th>Date of Birth</th>

@@ -3,11 +3,14 @@ import ClientsTable from "../components/ClientsTable";
 import AddClientForm from "../components/form/AddClientForm";
 import EditClientForm from "../components/form/EditClientForm";
 import { useClient } from "../context/ClientContext";
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const ClientList = () => {
   const drawerRef = useRef({} as HTMLInputElement);
-  const { clientFormType, setClientFormType } = useClient();
+  const { clientFormType, setClientFormType, setUserToken } = useClient();
+  const navigate = useNavigate();
 
   const closeDrawer = () => {
     if (drawerRef.current) {
@@ -18,6 +21,28 @@ const ClientList = () => {
   const handleAddClick = () => {
     setClientFormType("add");
   };
+
+  useEffect(() => {
+    axios({
+      method: "GET",
+      url: `http://localhost:15432/users/loggedIn`,
+      withCredentials: true,
+    })
+      .then((response) => {
+        console.log("logged in", response);
+        if (response.data.loggedInStatus) {
+          setUserToken({
+            username: response.data.username,
+            loggedInStatus: response.data.loggedInStatus,
+          });
+        } else {
+          navigate("/login");
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
 
   return (
     <div className="drawer drawer-end">
@@ -55,17 +80,6 @@ const ClientList = () => {
           )}
         </ul>
       </div>
-
-      {/* <div className="drawer-side">
-        <label
-          htmlFor="my-drawer-4"
-          aria-label="close sidebar"
-          className="drawer-overlay"
-        ></label>
-        <ul className="menu p-4 w-80 min-h-full bg-base-200 text-base-content">
-          <AddClientForm />
-        </ul>
-      </div> */}
     </div>
   );
 };

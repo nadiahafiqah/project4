@@ -67,7 +67,7 @@ const EditClientForm = ({ closeDrawer }: { closeDrawer: () => void }) => {
       axios({
         method: "PUT",
         url: `http://localhost:15432/clients/${selectedClient.id}`,
-        // withCredentials: true,
+        withCredentials: true,
         data: {
           firstName: selectedClient.firstName,
           lastName: selectedClient.lastName,

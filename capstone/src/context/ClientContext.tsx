@@ -1,4 +1,5 @@
 import { ReactNode, createContext, useContext, useState } from "react";
+import { Token } from "../types";
 
 const ClientContext = createContext({} as ClientContext);
 
@@ -6,7 +7,10 @@ type ClientProviderProps = {
   children: ReactNode;
 };
 
-type ClientContext = {};
+type ClientContext = {
+  userToken: Token;
+  setUserToken: React.Dispatch<React.SetStateAction<Token>>;
+};
 
 const defaultClient = {
   firstName: "",

@@ -101,7 +101,7 @@ const EditPolicyForm = ({ closeDrawer }: { closeDrawer: () => void }) => {
       axios({
         method: "PUT",
         url: `http://localhost:15432/policy/${selectedPolicy.id}`,
-        // withCredentials: true,
+        withCredentials: true,
         data: {
           category: selectedPolicy.category,
           policyName: selectedPolicy.policyName,
